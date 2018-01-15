@@ -195,6 +195,7 @@ class Agent(object):
 				self.game.print_board()
 				turn = 1
 			elif turn == 1:
+				print 'Select move:'
 				p = int(sys.stdin.readline()[:-1])
 				if self.game.is_valid_move(p):
 					winner = self.game.make_move(p)
