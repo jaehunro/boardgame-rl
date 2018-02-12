@@ -1,26 +1,26 @@
-class TicTacToe(object):
-    """
-    Tic Tac Toe is the game class that handles win conditions,
-    board state updates, and checks validity of moves
-    """
+"""Tic Tac Toe."""
+
+
+from game import Game
+
+
+class TicTacToe(Game):
+    """Tic Tac Toe game class."""
 
     def __init__(self):
-        """
-        Construct new tictactoe game instance
-        """
+        """Construct new tictactoe game instance."""
         self.board = ['-', '-', '-', '-', '-', '-', '-', '-', '-']
         self.player = 'X'
         self.winner = None
 
     def reset(self):
+        """Reset board between games."""
         self.board = ['-', '-', '-', '-', '-', '-', '-', '-', '-']
         self.player = 'X'
         self.winner = None
 
-    def available_moves(self):
-        """
-        Generates list of available moves given current state and associated next states
-        """
+    def get_open_moves(self):
+        """Returns list of available moves given current states and next states."""
         actions = []
         states = []
         for i, val in enumerate(self.board):
@@ -32,14 +32,13 @@ class TicTacToe(object):
         return states, actions
 
     def get_state(self, board):
-        """
-        Generates board state as String
-        """
+        """Returns board state as String."""
         return ''.join(board)
 
-    def check_win_condition(self):
-        """
-        Check the board to see if there is a possible winner or terminal condition (cat)
+    def is_win(self):
+        """Check the board for win condition.
+
+        Possible outputs are X, O, Draw, None.
         """
         state = self.get_state(self.board)
         # Check win condition
@@ -66,9 +65,9 @@ class TicTacToe(object):
         return None
 
     def is_valid_move(self, position):
-        """
-        Check that potential move is in a valid position
-        Valid meaning inbounds and not occupied
+        """Check that potential move is in a valid position.
+
+        Valid means inbounds and not occupied.
         """
         if position >= 0 and position < len(self.board):
             return self.board[position] == '-'
@@ -76,16 +75,16 @@ class TicTacToe(object):
             return False
 
     def make_move(self, position):
-        """
-        Makes move by setting position to player value and toggles player
-        Returns check_win_condition result
+        """Makes move by setting position to player value.
+
+        Also toggles player and returns is_win result.
         """
         self.board[position] = self.player
         self.player = 'O' if self.player == 'X' else 'X'
-        return self.check_win_condition()
+        return self.is_win()
 
     def print_board(self):
-        print '{} {} {}\n{} {} {}\n{} {} {}'.format(self.board[0], self.board[1], self.board[2],
+        print('{} {} {}\n{} {} {}\n{} {} {}'.format(self.board[0], self.board[1], self.board[2],
                                                     self.board[3], self.board[4], self.board[5],
-                                                    self.board[6], self.board[7], self.board[8])
-        print '====='
+                                                    self.board[6], self.board[7], self.board[8]))
+        print('=====')

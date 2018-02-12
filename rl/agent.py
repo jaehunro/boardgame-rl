@@ -1,15 +1,16 @@
+"""Reinforcement learning agent."""
+
+
 import numpy as np
 import json
 import sys
 
 
 class Agent(object):
-    """
-    Agent is the reinforcement learning agent that learns optimal state action pairs
-    """
+    """Agent is the reinforcement learning agent that learns optimal state action pairs."""
     def __init__(self, game, qtable=dict(), player='X', learning_rate=5e-1, discount=1, epsilon=5e-1):
-        """
-        Initialize agent with properties
+        """Initialize agent with properties
+
         - qtable is json table with Q values Q(s,a)
         - game is reference to game being played
         - player is what player the agent is 'X' or 'O'
@@ -25,15 +26,14 @@ class Agent(object):
         self.epsilon = epsilon
 
     def qvalue(self, state):
-        """
-        Retrieve value from qtable or initialize if not found
-        """
+        """Retrieve value from qtable or initialize if not found."""
         if state not in self.qtable:
             # Initialize Q-value at 0
             self.qtable[state] = 0.0
         return self.qtable[state]
 
     def argmax(self, values):
+        """Returns index of max value."""
         vmax = np.max(values)
         max_indices = []
         for i, v in enumerate(values):
@@ -42,6 +42,7 @@ class Agent(object):
         return np.random.choice(max_indices)
 
     def argmin(self, values):
+        """Returns index of min value."""
         vmin = np.min(values)
         min_indices = []
         for i, v in enumerate(values):
@@ -50,8 +51,8 @@ class Agent(object):
         return np.random.choice(min_indices)
 
     def step(self, verbose=False):
-        """
-        Agent makes one step which involves
+        """Agent makes one step.
+
         - Deciding optimal or random action following e-greedy strategy given current state
         - Taking selected action and observing next state
         - Calculating immediate reward of taking action, current state, and next state
@@ -64,19 +65,17 @@ class Agent(object):
         reward = self.reward(winner)
         self.update(reward, winner)
         if verbose:
-            print "========="
-            print state
-            print action
-            print winner
+            print("=========")
+            print(state)
+            print(action)
+            print(winner)
             self.game.print_board()
-            print reward
+            print(reward)
         return winner
 
     def next_move(self):
-        """
-        Select next move in MDP following e-greedy strategy
-        """
-        states, actions = self.game.available_moves()
+        """Selects next move in MDP following e-greedy strategy."""
+        states, actions = self.game.get_open_moves()
         # Exploit
         i = self.optimal_next(states)
         if np.random.random_sample() < self.epsilon:
@@ -85,8 +84,8 @@ class Agent(object):
         return actions[i]
 
     def optimal_next(self, states):
-        """
-        Select optimal next move
+        """Selects optimal next move.
+
         Input
         - states list of possible next states
         Output
@@ -102,8 +101,8 @@ class Agent(object):
             return self.argmin(values)
 
     def reward(self, winner):
-        """
-        Calculates reward for different end game conditions
+        """Calculates reward for different end game conditions.
+
         - win is 1.0
         - loss is -1.0
         - draw and unfinished is 0.0
@@ -117,24 +116,25 @@ class Agent(object):
             return 0
 
     def update(self, reward, winner):
-        """
-        Updates q-value using recorded observations of performing a
-        certain action in a certain state and continuing optimally from there
+        """Updates q-value.
+
+        Update uses recorded observations of performing a
+        certain action in a certain state and continuing optimally from there.
         """
         state = self.game.get_state(self.game.board)
         # Finding estimated future value by finding max(Q(s', a'))
         # If terminal condition is reached, future reward is 0
         future_val = 0
         if not winner:
-            future_states, _ = self.game.available_moves()
+            future_states, _ = self.game.get_open_moves()
             i = self.optimal_next(future_states)
             future_val = self.qvalue(future_states[i])
         # Q-value update
         self.qtable[state] = ((1 - self.learning_rate) * self.qvalue(state)) + (self.learning_rate * (reward + self.discount * future_val))
 
     def train(self, episodes):
-        """
-        Trains by playing against self for however many episodes
+        """Trains by playing against self.
+
         Each episode is a full game
         """
         for i in range(episodes):
@@ -144,13 +144,14 @@ class Agent(object):
                 if winner:
                     game_active = False
                     self.game.reset()
-            if (i % (episodes/10) == 0) and (i >= (episodes/10)):
-                print '.'
+            if (i % (episodes / 10) == 0) and (i >= (episodes / 10)):
+                print('.')
         # self.save_values()
 
     def stats(self):
-        """
-        Agent plays optimally against self with no exploration
+        """Agent plays optimally against self with no exploration.
+
+        Records win/loss/draw distribution.
         """
         x_wins = 0
         o_wins = 0
@@ -159,7 +160,7 @@ class Agent(object):
         for i in range(episodes):
             game_active = True
             while(game_active):
-                states, actions = self.game.available_moves()
+                states, actions = self.game.get_open_moves()
                 i = self.optimal_next(states)
                 winner = self.game.make_move(actions[i])
                 if winner:
@@ -171,42 +172,38 @@ class Agent(object):
                         draws += 1
                     game_active = False
                     self.game.reset()
-        print '    X: {} Draw: {} O: {}'.format((x_wins*1.0)/episodes,
-                                                (draws*1.0)/episodes,
-                                                (o_wins*1.0)/episodes)
+        print('    X: {} Draw: {} O: {}'.format((x_wins * 1.0) / episodes,
+                                                (draws * 1.0) / episodes,
+                                                (o_wins * 1.0) / episodes))
 
     def save_values(self):
-        """
-        Save Q values as json file
-        """
+        """Save Q values to json."""
         with open('data/qtable.json', 'w') as out:
             json.dump(self.qtable, out)
 
     def demo(self):
-        """
-        Demo so users can play against trained agent
-        """
+        """Demo so users can play against trained agent."""
         # Agent goes first
         game_active = True
         turn = 0
         while game_active:
             winner = None
             if turn == 0:
-                states, actions = self.game.available_moves()
+                states, actions = self.game.get_open_moves()
                 i = self.optimal_next(states)
                 winner = self.game.make_move(actions[i])
                 self.game.print_board()
                 turn = 1
             elif turn == 1:
-                print 'Select move:'
+                print('Select move:')
                 p = int(sys.stdin.readline()[:-1])
                 if self.game.is_valid_move(p):
                     winner = self.game.make_move(p)
                     self.game.print_board()
                     turn = 0
                 else:
-                    print 'Invalid move.'
+                    print('Invalid move.')
             if winner:
-                print 'Winner: {}'.format(winner)
+                print('Winner: {}'.format(winner))
                 game_active = False
         self.game.reset()
