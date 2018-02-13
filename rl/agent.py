@@ -183,6 +183,12 @@ class Agent(object):
 
     def demo(self):
         """Demo so users can play against trained agent."""
+        print('============\n'
+              'How to play:\n'
+              'Possible moves are [0,9) corresponding to these spaces on the board:\n\n'
+              '0 | 1 | 2\n'
+              '3 | 4 | 5\n'
+              '6 | 7 | 8\n')
         # Agent goes first
         game_active = True
         turn = 0
