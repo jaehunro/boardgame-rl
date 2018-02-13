@@ -9,13 +9,20 @@ This project was completed in order to learn the basics of implementing Q-learni
 
 ### Run instructions
 ```
-python main.py
+python main.py -game tictactoe
 ```
 
 ### Test instructions
 ```
 python -m unittest discover -v
 ```
+
+### Supported Board Games
+- Tic Tac Toe
+- Connect Four
+
+### Implement Your Own Custom Game
+Just add your game class to the game module and make sure it is a subclass of the Game abstract base class. Then just pass in your game to the rl agent.
 
 ### License
 MIT  © [Jae Hun Ro](http://jaehunro.com)
