@@ -12,6 +12,11 @@ This project was completed in order to learn the basics of implementing Q-learni
 python main.py
 ```
 
+### Test instructions
+```
+python -m unittest discover -v
+```
+
 ### How to play
 Possible moves are [0,9) corresponding to these spaces on the board
 ```
