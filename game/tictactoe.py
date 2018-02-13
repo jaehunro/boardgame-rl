@@ -88,3 +88,11 @@ class TicTacToe(Game):
                                                     self.board[3], self.board[4], self.board[5],
                                                     self.board[6], self.board[7], self.board[8]))
         print('=====')
+
+    def print_instructions(self):
+        print('===============\n'
+              'How to play:\n'
+              'Possible moves are [0,9) corresponding to these spaces on the board:\n\n'
+              '0 | 1 | 2\n'
+              '3 | 4 | 5\n'
+              '6 | 7 | 8\n')

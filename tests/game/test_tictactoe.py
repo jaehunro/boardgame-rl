@@ -34,7 +34,7 @@ class TestTicTacToe(unittest.TestCase):
         modified_board = ['-', 'X', 'X',
                           'O', 'O', 'X',
                           'O', '-', '-']
-        self.game.board = None
+        self.game.board = modified_board
         self.game.reset()
         self.assertEqual(['-', '-', '-',
                           '-', '-', '-',
