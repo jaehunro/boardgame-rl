@@ -47,25 +47,46 @@ def play_tictactoe(mode):
         agent = Agent(game)
         history = agent.train(10000)
         print('After 10000 Episodes')
-        fig, ax = plt.subplots()
-        ax.plot(history[0][:100], history[1][:100])
 
-        ax.set(xlabel='Episode', ylabel='Cumulative Reward',
-               title='Tic Tac Toe Agent 100 Episodes')
-        ax.grid()
-        fig.savefig('img/tictactoe_100.png')
+        # Plot Reward Stats
+        rfig, raxs = plt.subplots(nrows=3, ncols=1)
+        rax_reward1 = raxs[0]
+        rax_reward1.grid()
+        rax_reward2 = raxs[1]
+        rax_reward2.grid()
+        rax_reward3 = raxs[2]
+        rax_reward3.grid()
 
-        ax.plot(history[0][:1000], history[1][:1000])
+        rax_reward1.plot(history[0][:100], history[1][:100])
+        rax_reward1.set(ylabel='Cumulative Reward', title='Tic Tac Toe Agent Episodes')
 
-        ax.set(xlabel='Episode', ylabel='Cumulative Reward',
-               title='Tic Tac Toe Agent 1000 Episodes')
-        fig.savefig('img/tictactoe_1000.png')
+        rax_reward2.plot(history[0][:1000], history[1][:1000], color='g')
+        rax_reward2.set(ylabel='Cumulative Reward')
 
-        ax.plot(history[0][:10000], history[1][:10000])
+        rax_reward3.plot(history[0][:10000], history[1][:10000], color='r')
+        rax_reward3.set(xlabel='Episode', ylabel='Cumulative Reward')
 
-        ax.set(xlabel='Episode', ylabel='Cumulative Reward',
-               title='Tic Tac Toe Agent 10000 Episodes')
-        fig.savefig('img/tictactoe_10000.png')
+        rfig.savefig('tictactoe_reward.png')
+
+        # Plot Qtable Memory Usage Stats
+        memfig, memaxs = plt.subplots(nrows=3, ncols=1)
+        memax_reward1 = memaxs[0]
+        memax_reward1.grid()
+        memax_reward2 = memaxs[1]
+        memax_reward2.grid()
+        memax_reward3 = memaxs[2]
+        memax_reward3.grid()
+
+        memax_reward1.plot(history[0][:100], history[2][:100])
+        memax_reward1.set(ylabel='Size (KB)', title='Tic Tac Toe QTable Size Episodes')
+
+        memax_reward2.plot(history[0][:1000], history[2][:1000], color='g')
+        memax_reward2.set(ylabel='Size (KB)')
+
+        memax_reward3.plot(history[0][:10000], history[2][:10000], color='r')
+        memax_reward3.set(xlabel='Episode', ylabel='Size (KB)')
+
+        memfig.savefig('tictactoe_memory.png')
         plt.show()
 
         agent.save_values(path='data/tictactoe_qtable.json')
@@ -90,25 +111,46 @@ def play_connectfour(mode):
         agent = Agent(game)
         history = agent.train(10000)
         print('After 10000 Episodes')
-        fig, ax = plt.subplots()
-        ax.plot(history[0][:100], history[1][:100])
 
-        ax.set(xlabel='Episode', ylabel='Cumulative Reward',
-               title='Connect Four Agent 100 Episodes')
-        ax.grid()
-        fig.savefig('img/connectfour_100.png')
+        # Plot Reward Stats
+        rfig, raxs = plt.subplots(nrows=3, ncols=1)
+        rax_reward1 = raxs[0]
+        rax_reward1.grid()
+        rax_reward2 = raxs[1]
+        rax_reward2.grid()
+        rax_reward3 = raxs[2]
+        rax_reward3.grid()
 
-        ax.plot(history[0][:1000], history[1][:1000])
+        rax_reward1.plot(history[0][:100], history[1][:100])
+        rax_reward1.set(ylabel='Cumulative Reward', title='Connect Four Agent Episodes')
 
-        ax.set(xlabel='Episode', ylabel='Cumulative Reward',
-               title='Connect Four Agent 1000 Episodes')
-        fig.savefig('img/connectfour_1000.png')
+        rax_reward2.plot(history[0][:1000], history[1][:1000], color='g')
+        rax_reward2.set(ylabel='Cumulative Reward')
 
-        ax.plot(history[0][:10000], history[1][:10000])
+        rax_reward3.plot(history[0][:10000], history[1][:10000], color='r')
+        rax_reward3.set(xlabel='Episode', ylabel='Cumulative Reward')
 
-        ax.set(xlabel='Episode', ylabel='Cumulative Reward',
-               title='Connect Four Agent 10000 Episodes')
-        fig.savefig('img/connectfour_10000.png')
+        rfig.savefig('connectfour_reward.png')
+
+        # Plot Qtable Memory Usage Stats
+        memfig, memaxs = plt.subplots(nrows=3, ncols=1)
+        memax_reward1 = memaxs[0]
+        memax_reward1.grid()
+        memax_reward2 = memaxs[1]
+        memax_reward2.grid()
+        memax_reward3 = memaxs[2]
+        memax_reward3.grid()
+
+        memax_reward1.plot(history[0][:100], history[2][:100])
+        memax_reward1.set(ylabel='Size (KB)', title='Connect Four Agent QTable Size Episodes')
+
+        memax_reward2.plot(history[0][:1000], history[2][:1000], color='g')
+        memax_reward2.set(ylabel='Size (KB)')
+
+        memax_reward3.plot(history[0][:10000], history[2][:10000], color='r')
+        memax_reward3.set(xlabel='Episode', ylabel='Size (KB)')
+
+        memfig.savefig('connectfour_memory.png')
         plt.show()
 
         agent.save_values(path='data/connectfour_qtable.json')
@@ -117,7 +159,6 @@ def play_connectfour(mode):
     elif mode == 'demo':
         qtable = json.load(open('data/connectfour_qtable.json'))
         agent = Agent(game, qtable=qtable)
-        agent = Agent(game)
         agent.demo()
 
     else:

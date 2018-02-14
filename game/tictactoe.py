@@ -40,16 +40,15 @@ class TicTacToe(Game):
 
         Possible outputs are X, O, Draw, None.
         """
-        state = self.get_state(self.board)
         # Check win condition
-        row_1 = state[:3]
-        row_2 = state[3:6]
-        row_3 = state[6:]
-        col_1 = state[0] + state[3] + state[6]
-        col_2 = state[1] + state[4] + state[7]
-        col_3 = state[2] + state[5] + state[8]
-        diag_1 = state[0] + state[4] + state[8]
-        diag_2 = state[2] + state[4] + state[6]
+        row_1 = self.board[0] + self.board[1] + self.board[2]
+        row_2 = self.board[3] + self.board[4] + self.board[5]
+        row_3 = self.board[6] + self.board[7] + self.board[8]
+        col_1 = self.board[0] + self.board[3] + self.board[6]
+        col_2 = self.board[1] + self.board[4] + self.board[7]
+        col_3 = self.board[2] + self.board[5] + self.board[8]
+        diag_1 = self.board[0] + self.board[4] + self.board[8]
+        diag_2 = self.board[2] + self.board[4] + self.board[6]
         triples = [row_1, row_2, row_3, col_1, col_2, col_3, diag_1, diag_2]
 
         for triple in triples:

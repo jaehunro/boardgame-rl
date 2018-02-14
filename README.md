@@ -17,12 +17,15 @@ python main.py -game tictactoe
 python -m unittest discover -v
 ```
 
-![alt text](img/tictactoe_100.png "Tic Tac Toe RL Agent 100 Episodes")
-![alt text](img/tictactoe_1000.png "Tic Tac Toe RL Agent 1000 Episodes")
-![alt text](img/tictactoe_10000.png "Tic Tac Toe RL Agent 10000 Episodes")
-![alt text](img/connectfour_100.png "Connect Four RL Agent 100 Episodes")
-![alt text](img/connectfour_1000.png "Connect Four RL Agent 1000 Episodes")
-![alt text](img/connectfour_10000.png "Connect Four RL Agent 10000 Episodes")
+<p float="left">
+  <img src="img/tictactoe_reward.png" width="400"/>
+  <img src="img/connectfour_reward.png" width="400"/> 
+</p>
+
+<p float="left">
+  <img src="img/tictactoe_memory.png" width="400"/>
+  <img src="img/connectfour_memory.png" width="400"/> 
+</p>
 
 ### Supported Board Games
 - Tic Tac Toe

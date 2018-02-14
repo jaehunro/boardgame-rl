@@ -138,7 +138,9 @@ class Agent(object):
         Each episode is a full game
         """
         x = range(episodes)
-        y = []
+        cumulative_reward = []
+        memory = []
+
         total_reward = 0.0
         for i in range(episodes):
             game_active = True
@@ -148,13 +150,15 @@ class Agent(object):
                 if winner:
                     game_active = False
                     self.game.reset()
-            y.append(total_reward)
+            cumulative_reward.append(total_reward)
+            memory.append(sys.getsizeof(self.qtable) / 1024)
             # Record total reward agent gains as training progresses
             if (i % (episodes / 10) == 0) and (i >= (episodes / 10)):
                 print('.')
         # self.save_values()
         history.append(x)
-        history.append(y)
+        history.append(cumulative_reward)
+        history.append(memory)
         return history
 
     def stats(self):
