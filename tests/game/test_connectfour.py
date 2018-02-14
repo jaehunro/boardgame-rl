@@ -34,10 +34,10 @@ class TestConnectFour(unittest.TestCase):
 
     def test_reset(self):
         """Test reset method."""
-        modified_board = ['X', '-', '-', '-',
-                          '-', '-', '-', 'X',
+        modified_board = ['-', '-', '-', '-',
+                          '-', '-', '-', '-',
                           'O', '-', '-', '-',
-                          'O', '-', '-', '-']
+                          'O', '-', 'X', 'X']
         self.game.board = modified_board
         self.game.reset()
         self.assertEqual(['-', '-', '-', '-',
@@ -49,13 +49,13 @@ class TestConnectFour(unittest.TestCase):
     def test_get_open_moves(self):
         """Test get_open_moves method."""
         self.game.board = ['-', '-', 'X', 'X',
-                           'O', 'O', 'O', 'O',
+                           'O', '-', 'O', 'O',
                            'O', 'O', 'X', 'X',
                            'X', 'X', 'X', 'O']
         next_moves = self.game.get_open_moves()
         states = next_moves[0]
         actions = next_moves[1]
-        self.assertEqual(['X-XXOOOOOOXXXXXO', '-XXXOOOOOOXXXXXO'], states)
+        self.assertEqual(['X-XXO-OOOOXXXXXO', '--XXOXOOOOXXXXXO'], states)
         self.assertEqual([0, 1], actions)
 
     def test_get_state(self):
@@ -171,10 +171,10 @@ class TestConnectFour(unittest.TestCase):
         # Check win result
         self.assertEqual(None, self.game.make_move(0))
         # Check board state
-        self.assertEqual(['X', '-', '-', '-',
+        self.assertEqual(['-', '-', '-', '-',
                           '-', '-', '-', '-',
                           '-', '-', '-', '-',
-                          '-', '-', '-', '-'], self.game.board)
+                          'X', '-', '-', '-'], self.game.board)
         # Check toggled game player
         self.assertEqual('O', self.game.player)
 

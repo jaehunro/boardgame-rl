@@ -36,17 +36,43 @@ class ConnectFour(Game):
         """Returns list of available moves given current states and next states."""
         actions = []
         states = []
-        for i, val in enumerate(self.board):
-            if val == '-':
-                actions.append(i)
-                self.board[i] = self.player
-                states.append(self.get_state(self.board))
-                self.board[i] = '-'
+
+        for i in range(self.cols):
+            column_indices = self.get_column_indices(i)
+            column_indices.reverse()
+            for j in column_indices:
+                # Iterate over input column backwards (bottom up) to determine drop landing position
+                if self.board[j] == '-':
+                    # Find first empty spot from bottom and 'drop' token there
+                    self.board[j] = self.player
+                    states.append(self.get_state(self.board))
+                    # Record column num as action
+                    actions.append(i)
+                    self.board[j] = '-'
+                    break
         return states, actions
 
     def get_state(self, board):
         """Returns board state as String."""
         return ''.join(board)
+
+    def get_grid(self, board):
+        """Returns grid 2D representation of board."""
+        grid = []
+        for i in range(self.rows):
+            grid.append([])
+            for j in range(self.cols):
+                grid[i].append(board[(i * self.cols) + j])
+        return grid
+
+    def get_column_indices(self, col):
+        """Return column indices of board at column position."""
+        column_indices = []
+        # Find index of bottom position in selected column
+        bottom = len(self.board) - (self.cols - col)
+        for i in range(col, bottom + 1, self.cols):
+            column_indices.append(i)
+        return column_indices
 
     def is_win(self):
         """Check the board for win condition.
@@ -54,11 +80,7 @@ class ConnectFour(Game):
         Possible outputs are X, O, Draw, None.
         """
         # Convert to 2D array for ease of implementaiton
-        grid = []
-        for i in range(self.rows):
-            grid.append([])
-            for j in range(self.cols):
-                grid[i].append(self.board[(i * self.cols) + j])
+        grid = self.get_grid(self.board)
 
         # Check horizontal, vertical, and diagonal sequences for four in a row
         for i in range(self.rows):
@@ -98,22 +120,34 @@ class ConnectFour(Game):
         # Unfinished game
         return None
 
-    def is_valid_move(self, position):
-        """Check that potential move is in a valid position.
+    def is_valid_move(self, col):
+        """Check that potential column selection is valid.
 
-        Valid means inbounds and not occupied.
+        Valid means inbounds and column is not completely occupied.
         """
-        if position >= 0 and position < len(self.board):
-            return self.board[position] == '-'
+        if col >= 0 and col < self.cols:
+            column_indices = self.get_column_indices(col)
+            for i in column_indices:
+                if self.board[i] == '-':
+                    return True
+            return False
         else:
             return False
 
-    def make_move(self, position):
-        """Makes move by setting position to player value.
+    def make_move(self, col):
+        """Makes move by vertically dropping token in column #col.
 
         Also toggles player and returns is_win result.
         """
-        self.board[position] = self.player
+        # Find index of bottom position in selected column
+        column_indices = self.get_column_indices(col)
+        column_indices.reverse()
+        for i in column_indices:
+            # Iterate over input column backwards (bottom up) to determine drop landing position
+            if self.board[i] == '-':
+                # Find first empty spot from bottom and 'drop' token there
+                self.board[i] = self.player
+                break
         self.player = 'O' if self.player == 'X' else 'X'
         return self.is_win()
 
