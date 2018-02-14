@@ -50,7 +50,7 @@ class Agent(object):
                 min_indices.append(i)
         return np.random.choice(min_indices)
 
-    def step(self, verbose=False):
+    def step(self, history=False, verbose=False):
         """Agent makes one step.
 
         - Deciding optimal or random action following e-greedy strategy given current state
@@ -71,7 +71,7 @@ class Agent(object):
             print(winner)
             self.game.print_board()
             print(reward)
-        return winner
+        return (winner, reward)
 
     def next_move(self):
         """Selects next move in MDP following e-greedy strategy."""
@@ -132,21 +132,30 @@ class Agent(object):
         # Q-value update
         self.qtable[state] = ((1 - self.learning_rate) * self.qvalue(state)) + (self.learning_rate * (reward + self.discount * future_val))
 
-    def train(self, episodes):
+    def train(self, episodes, history=[]):
         """Trains by playing against self.
 
         Each episode is a full game
         """
+        x = range(episodes)
+        y = []
+        total_reward = 0.0
         for i in range(episodes):
             game_active = True
             while(game_active):
-                winner = self.step()
+                winner, reward = self.step()
+                total_reward += reward
                 if winner:
                     game_active = False
                     self.game.reset()
+            y.append(total_reward)
+            # Record total reward agent gains as training progresses
             if (i % (episodes / 10) == 0) and (i >= (episodes / 10)):
                 print('.')
         # self.save_values()
+        history.append(x)
+        history.append(y)
+        return history
 
     def stats(self):
         """Agent plays optimally against self with no exploration.
@@ -176,9 +185,9 @@ class Agent(object):
                                                 (draws * 1.0) / episodes,
                                                 (o_wins * 1.0) / episodes))
 
-    def save_values(self):
+    def save_values(self, path='data/qtable.json'):
         """Save Q values to json."""
-        with open('data/qtable.json', 'w') as out:
+        with open(path, 'w') as out:
             json.dump(self.qtable, out)
 
     def demo(self):
