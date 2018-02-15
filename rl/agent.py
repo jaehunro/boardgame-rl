@@ -144,6 +144,13 @@ class Agent(object):
         total_reward = 0.0
         for i in range(episodes):
             game_active = True
+            # First move is random to promote exploration
+            _, actions = self.game.get_open_moves()
+            winner = self.game.make_move(actions[np.random.randint(0, len(actions))])
+            reward = self.reward(winner)
+            total_reward += reward
+            self.update(reward, winner)
+            # Rest of game follows strategy
             while(game_active):
                 winner, reward = self.step()
                 total_reward += reward

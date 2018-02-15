@@ -164,10 +164,11 @@ class ConnectFour(Game):
     def print_instructions(self):
         print('===============\n'
               'How to play:\n'
-              'Possible moves are [0,M*N) where M is rows and N is cols\n'
+              'Possible moves are [0,N) where N is cols\n'
+              'Selecting a column drops a piece vertically in that column\n\n'
               'Corresponding to these spaces on the board:\n\n'
               '0 | 1 | 2 | ... | N - 1\n'
               '.\n'
               '.\n'
               '.\n'
-              '. | . | . | ... | M*N - 1\n')
+              '. | . | . | ... | . \n')
