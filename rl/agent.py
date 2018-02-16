@@ -59,16 +59,17 @@ class Agent(object):
         - Updating q table values using GD with derivative of MSE of Q-value
         - Returns game status
         """
-        state = self.game.get_state(self.game.board)
-        action = self.next_move()
+        old_board = [val for val in self.game.board]
+        state, action = self.next_move()
         winner = self.game.make_move(action)
         reward = self.reward(winner)
-        self.update(reward, winner)
+        self.update(reward, winner, state)
         if verbose:
             print("=========")
-            print(state)
+            print(old_board)
             print(action)
             print(winner)
+            print(state)
             self.game.print_board()
             print(reward)
         return (winner, reward)
@@ -81,7 +82,7 @@ class Agent(object):
         if np.random.random_sample() < self.epsilon:
             # Explore
             i = np.random.randint(0, len(states))
-        return actions[i]
+        return states[i], actions[i]
 
     def optimal_next(self, states):
         """Selects optimal next move.
@@ -115,13 +116,12 @@ class Agent(object):
         else:
             return 0
 
-    def update(self, reward, winner):
+    def update(self, reward, winner, state):
         """Updates q-value.
 
         Update uses recorded observations of performing a
         certain action in a certain state and continuing optimally from there.
         """
-        state = self.game.get_state(self.game.board)
         # Finding estimated future value by finding max(Q(s', a'))
         # If terminal condition is reached, future reward is 0
         future_val = 0
@@ -145,11 +145,12 @@ class Agent(object):
         for i in range(episodes):
             game_active = True
             # First move is random to promote exploration
-            _, actions = self.game.get_open_moves()
-            winner = self.game.make_move(actions[np.random.randint(0, len(actions))])
+            states, actions = self.game.get_open_moves()
+            rand = np.random.randint(0, len(actions))
+            winner = self.game.make_move(actions[rand])
             reward = self.reward(winner)
             total_reward += reward
-            self.update(reward, winner)
+            self.update(reward, winner, states[rand])
             # Rest of game follows strategy
             while(game_active):
                 winner, reward = self.step()

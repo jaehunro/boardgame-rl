@@ -17,15 +17,23 @@ python main.py -game tictactoe
 python -m unittest discover -v
 ```
 
+### Tic Tac Toe
 <p float="left">
-  <img src="img/tictactoe_reward.png" width="400"/>
-  <img src="img/connectfour_reward.png" width="400"/> 
+	<img src="img/tictactoe_reward.png" width="400"/>
+	<img src="img/tictactoe_memory.png" width="400"/>
 </p>
 
+### Connect Four
+Alternate state representation of full board vs. 3 column state. Significantly reduces memory with little cost to agent performance.
 <p float="left">
-  <img src="img/tictactoe_memory.png" width="400"/>
-  <img src="img/connectfour_memory.png" width="400"/> 
+  <img src="img/connectfour_reward.png" width="400"/>
+  <img src="img/connectfour_reward3.png" width="400"/> 
 </p>
+<p float="left">
+  <img src="img/connectfour_memory.png" width="400"/>
+  <img src="img/connectfour_memory3.png" width="400"/> 
+</p>
+
 
 ### Supported Board Games
 - Tic Tac Toe

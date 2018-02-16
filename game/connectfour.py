@@ -45,16 +45,27 @@ class ConnectFour(Game):
                 if self.board[j] == '-':
                     # Find first empty spot from bottom and 'drop' token there
                     self.board[j] = self.player
-                    states.append(self.get_state(self.board))
+                    states.append(self.get_state(self.board, col=i))
                     # Record column num as action
                     actions.append(i)
                     self.board[j] = '-'
                     break
         return states, actions
 
-    def get_state(self, board):
-        """Returns board state as String."""
-        return ''.join(board)
+    def get_state(self, board, col):
+        """Returns board state as String.
+
+        State is based on selected column and two adjacent columns.
+        """
+        state = ''
+        for i in range(col - 1, col + 2):
+            if i >= 0 and i < self.cols:
+                column = []
+                bottom = len(self.board) - (self.cols - i)
+                for j in range(i, bottom + 1, self.cols):
+                    column.append(self.board[j])
+                state += ''.join(column)
+        return state
 
     def get_grid(self, board):
         """Returns grid 2D representation of board."""

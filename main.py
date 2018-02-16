@@ -58,7 +58,7 @@ def play_tictactoe(mode):
         rax_reward3.grid()
 
         rax_reward1.plot(history[0][:100], history[1][:100])
-        rax_reward1.set(ylabel='Cumulative Reward', title='Tic Tac Toe Agent Episodes')
+        rax_reward1.set(ylabel='Cumulative Reward', title='Tic Tac Toe Cumulative Reward Episodes')
 
         rax_reward2.plot(history[0][:1000], history[1][:1000], color='g')
         rax_reward2.set(ylabel='Cumulative Reward')
@@ -122,7 +122,7 @@ def play_connectfour(mode):
         rax_reward3.grid()
 
         rax_reward1.plot(history[0][:100], history[1][:100])
-        rax_reward1.set(ylabel='Cumulative Reward', title='Connect Four Agent Episodes')
+        rax_reward1.set(ylabel='Cumulative Reward', title='Connect Four Cumulative Reward (3 Column State)')
 
         rax_reward2.plot(history[0][:1000], history[1][:1000], color='g')
         rax_reward2.set(ylabel='Cumulative Reward')
@@ -142,7 +142,7 @@ def play_connectfour(mode):
         memax_reward3.grid()
 
         memax_reward1.plot(history[0][:100], history[2][:100])
-        memax_reward1.set(ylabel='Size (KB)', title='Connect Four Agent QTable Size Episodes')
+        memax_reward1.set(ylabel='Size (KB)', title='Connect Four QTable Size (3 Column State)')
 
         memax_reward2.plot(history[0][:1000], history[2][:1000], color='g')
         memax_reward2.set(ylabel='Size (KB)')
