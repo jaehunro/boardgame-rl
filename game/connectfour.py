@@ -2,6 +2,7 @@
 
 
 from game import Game
+import sys
 
 
 class ConnectFour(Game):
@@ -161,6 +162,10 @@ class ConnectFour(Game):
                 break
         self.player = 'O' if self.player == 'X' else 'X'
         return self.is_win()
+
+    def read_input(self):
+        """Define game specific read in function from command line."""
+        return int(sys.stdin.readline()[:-1])
 
     def print_board(self):
         s = ''

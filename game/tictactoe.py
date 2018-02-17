@@ -2,6 +2,7 @@
 
 
 from game import Game
+import sys
 
 
 class TicTacToe(Game):
@@ -81,6 +82,10 @@ class TicTacToe(Game):
         self.board[position] = self.player
         self.player = 'O' if self.player == 'X' else 'X'
         return self.is_win()
+
+    def read_input(self):
+        """Define game specific read in function from command line."""
+        return int(sys.stdin.readline()[:-1])
 
     def print_board(self):
         print('{} {} {}\n{} {} {}\n{} {} {}'.format(self.board[0], self.board[1], self.board[2],

@@ -8,7 +8,7 @@ import sys
 
 class Agent(object):
     """Agent is the reinforcement learning agent that learns optimal state action pairs."""
-    def __init__(self, game, qtable=dict(), player='X', learning_rate=5e-1, discount=1, epsilon=5e-1):
+    def __init__(self, game, qtable=dict(), player='X', learning_rate=5e-1, discount=9e-1, epsilon=5e-1):
         """Initialize agent with properties
 
         - qtable is json table with Q values Q(s,a)
@@ -50,7 +50,7 @@ class Agent(object):
                 min_indices.append(i)
         return np.random.choice(min_indices)
 
-    def step(self, history=False, verbose=False):
+    def step(self, verbose=False):
         """Agent makes one step.
 
         - Deciding optimal or random action following e-greedy strategy given current state
@@ -70,6 +70,7 @@ class Agent(object):
             print(action)
             print(winner)
             print(state)
+            print('Q value: {}'.format(self.qvalue(state)))
             self.game.print_board()
             print(reward)
         return (winner, reward)
@@ -143,27 +144,21 @@ class Agent(object):
 
         total_reward = 0.0
         for i in range(episodes):
+            episode_reward = 0.0
             game_active = True
-            # First move is random to promote exploration
-            states, actions = self.game.get_open_moves()
-            rand = np.random.randint(0, len(actions))
-            winner = self.game.make_move(actions[rand])
-            reward = self.reward(winner)
-            total_reward += reward
-            self.update(reward, winner, states[rand])
             # Rest of game follows strategy
             while(game_active):
                 winner, reward = self.step()
-                total_reward += reward
+                episode_reward += reward
                 if winner:
                     game_active = False
                     self.game.reset()
+            total_reward += episode_reward
             cumulative_reward.append(total_reward)
             memory.append(sys.getsizeof(self.qtable) / 1024)
             # Record total reward agent gains as training progresses
             if (i % (episodes / 10) == 0) and (i >= (episodes / 10)):
                 print('.')
-        # self.save_values()
         history.append(x)
         history.append(cumulative_reward)
         history.append(memory)
@@ -202,27 +197,26 @@ class Agent(object):
         with open(path, 'w') as out:
             json.dump(self.qtable, out)
 
-    def demo(self):
+    def demo(self, first=True):
         """Demo so users can play against trained agent."""
         self.game.print_instructions()
         # Agent goes first
         game_active = True
-        turn = 0
         while game_active:
             winner = None
-            if turn == 0:
+            if first:
                 states, actions = self.game.get_open_moves()
                 i = self.optimal_next(states)
                 winner = self.game.make_move(actions[i])
                 self.game.print_board()
-                turn = 1
-            elif turn == 1:
+                first = not first
+            elif not first:
                 print('Select move:')
-                p = int(sys.stdin.readline()[:-1])
+                p = self.game.read_input()
                 if self.game.is_valid_move(p):
                     winner = self.game.make_move(p)
                     self.game.print_board()
-                    turn = 0
+                    first = not first
                 else:
                     print('Invalid move.')
             if winner:
