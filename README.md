@@ -41,6 +41,11 @@ Alternate state representation of full board vs. 3 column state. Significantly r
 </p>
 
 ### [Chomp](https://en.wikipedia.org/wiki/Chomp)
+<p float="left">
+  <img src="img/chomp_reward.png" width="400"/>
+  <img src="img/chomp_memory.png" width="400"/> 
+</p>
+
 While implementing the game, I encountered some interesting problems. For Chomp, it is especially important to know which rectangles of chocolate were eaten at the same time.
 
 For example, although
@@ -70,10 +75,6 @@ and
   - -
 P * *
 ```
-<p float="left">
-  <img src="img/chomp_reward.png" width="400"/>
-  <img src="img/chomp_memory.png" width="400"/> 
-</p>
 
 ### Implement Your Own Custom Game
 Just add your game class to the game module and make sure it is a subclass of the Game abstract base class. Then just pass in your game to the rl agent.
