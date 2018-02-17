@@ -38,6 +38,11 @@ class Game(object):
     def print_board(self):
         """Print game board."""
         raise NotImplementedError('Print board must be implemented.')
+        
+    @abstractmethod
+    def read_input(self):
+        """Read input from command line."""
+        raise NotImplementedError('Read input must be implemented.')
 
     @abstractmethod
     def reset(self):
